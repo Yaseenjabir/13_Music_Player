@@ -1,163 +1,152 @@
-// const play = document.querySelector("#play");
-// const music = document.querySelector("audio");
-// const image = document.querySelector("img");
-// const title = document.querySelector("#title");
-// const artist = document.querySelector("#artist");
-// const forward = document.querySelector("#forward");
-// const previous = document.querySelector("#previous");
-
-// console.log(music)
-
-// const songs = [
-//   {
-//     name: "1",
-//     title: "Lotus",
-//     artist: "The Loyalist",
-//   },
-//   {
-//     name: "2",
-//     title: "Butterfly",
-//     artist: "Jeko Kaanp",
-//   },
-//   {
-//     name: "3",
-//     title: "Leete",
-//     artist: "Liuajko KJ",
-//   }
-// ];
-
-// // console.log(title,artist,forward,previous)
-
-// // console.log(play)
-
-// let isPlaying = false;
-// const playMusic = () => {
-//   isPlaying = true;
-//   music.play();
-//   play.classList.replace("fa-play", "fa-pause");
-//   image.classList.add("anime");
-// };
-
-// const pauseMusic = () => {
-//   isPlaying = false;
-//   music.pause();
-//   play.classList.replace("fa-pause", "fa-play");
-//   image.classList.remove("anime");
-// };
-
-// play.addEventListener("click", () => {
-//   // if(isPlaying){
-//   //   pauseMusic();
-//   // }
-//   // else{
-//   //   playMusic();
-//   // }
-//   isPlaying ? pauseMusic() : playMusic();
-// });
-
-// const loadSong = (songs)=>{
-//   title.textContent = songs.title;
-//   artist.textContent = songs.artist;
-//   music.src = `songs/${songs.name}.mp3`
-//   image.src = `images/${songs.name}.jpg`
-//   // image.src = 
-
-// }
-
-// let songsindex = 0;
-
-// const nextSong = ()=>{
-//   songsindex = (songsindex + 1)% songs.length;
-//   // songsindex++
-//   loadSong(songs[songsindex]);
-//   playMusic();
-// }
-
-// const prevSong = ()=>{
-//   songsindex = (songsindex - 1 + songs.length) % songs.length;
-//   loadSong(songs[songsindex]);
-//   playMusic();
-// }
-
-// forward.addEventListener("click",nextSong);
-// previous.addEventListener("click",prevSong);
-const title = document.querySelector("#title");
-const artist = document.querySelector("#artist");
-const forward = document.querySelector("#forward");
-const previous = document.querySelector("#previous");
-const play = document.querySelector("#play");
-const audio = document.querySelector("audio");
-const image = document.querySelector("img");
+// Selecting all the variables
+const playBtn = document.querySelector(".play");
+const music = document.querySelector("audio");
+const img = document.querySelector("img");
+const nextBtn = document.querySelector(".forward");
+const previousBtn = document.querySelector(".backward")
+const songName = document.querySelector(".main h1");
+const artistName = document.querySelector(".main h3");
+const theCurrentTime = document.querySelector('.time h6')
+let theSongDuration = document.querySelector('.secondh6')
+const progress = document.querySelector(".progress")
+const progressParent = document.querySelector(".progressParent");
 
 
+// Creating and array of objects, each object contains different songs information
 const songs = [
   {
-    name: "1",
-    title: "Lotus",
-    artist: "The Loyalist",
+    name : "1",
+    song : "LollyPop",
+    artist : "The King"
   },
   {
-    name: "2",
-    title: "Butterfly",
-    artist: "Jeko Kaanp",
+    name : "2",
+    song : "I'm not alone",
+    artist : "DJ Khaled"
   },
   {
-    name: "3",
-    title: "Leete",
-    artist: "Liuajko KJ",
-  }
-];
+    name : "3",
+    song : "Side Slide",
+    artist : "Verno Cyrus"
+  },
+  {
+    name : "4",
+    song : "Shadow Box",
+    artist : "Boolena"
+  },
+]
 
+
+// Create a function to play Music
 let isPlaying = false;
 const playMusic = ()=>{
   isPlaying = true;
-  audio.play();
-  play.classList.replace("fa-play", "fa-pause");
-  image.classList.add("anime")
+  music.play();
+  playBtn.classList.replace("fa-play", "fa-pause")
+  img.classList.add("anime");
 }
 
-const pauseMusic = ()=>{
+
+// Create a function to stop Music
+const stopMusic = ()=>{
   isPlaying = false;
-  audio.pause();
-  play.classList.replace("fa-pause", "fa-play");
-  image.classList.remove("anime");
+  music.pause();
+  playBtn.classList.replace("fa-pause", "fa-play")
+  img.classList.remove("anime");
 }
 
-play.addEventListener("click",()=>{
- isPlaying ? pauseMusic() : playMusic();
-})
 
-audio.addEventListener("ended",()=>{
-  pauseMusic();
+// Logic to stop and pause the music 
+playBtn.addEventListener("click",()=>{
+  if(isPlaying){
+    stopMusic();
+  }
+  else{
+    playMusic();
+  }
 })
 
 let index = 0
-const loadSong = ()=>{
-  title.textContent = songs[index].title;
-  artist.textContent = songs[index].artist;
-  image.src = `images/${songs[index].name}.jpg`
-  audio.src = `songs/${songs[index].name}.mp3`
-}
-
-
 const nextSong = ()=>{
-  index++
-  if(index === songs.length){
-    index = 0
-  }
-  loadSong();
-  playMusic();
+  songName.textContent = `${songs[index].song}`;
+  artistName.textContent = `${songs[index].artist}`;
+  img.src = `/images/${songs[index].name}.jpg`
+  music.src =`/songs/${songs[index].name}.mp3`
 }
 
-const prevSong = ()=>{
-  index--
+
+// Creating logic for next song
+nextBtn.addEventListener("click",()=>{
+  index++;
+  if(index > songs.length - 1){
+    index = 0;
+  }
+  nextSong();
+  playMusic();
+})
+
+
+// Creating logic for previous song
+previousBtn.addEventListener("click",()=>{
+  index--;
   if(index < 0){
-    index = songs.length - 1;
+    index = songs.length -1
   }
-  loadSong();
+  nextSong();
   playMusic();
-}
+})
 
 
-forward.addEventListener("click",nextSong);
-previous.addEventListener("click",prevSong)
+// Creating logic to update the song duration and current play time
+music.addEventListener("timeupdate",(e)=>{
+  const songDuration = Math.floor(e.srcElement.duration);
+  const currentTime = e.srcElement.currentTime;
+
+  const progressMovement = (currentTime / songDuration) * 100;
+  console.log(progressMovement)
+  progress.style.width = `${progressMovement}%`
+  
+
+  //Setting Duration
+  let totalMin = Math.floor((currentTime / 60));
+  let totalSec = Math.floor((currentTime % 60));
+
+  if(totalMin < 10){
+    totalMin = `0${totalMin}`;
+  }
+  if(totalSec < 10){
+    totalSec = `0${totalSec}`
+  }
+  theCurrentTime.textContent = `${totalMin} : ${totalSec}`
+
+
+
+  let totalMin2 = Math.floor((songDuration / 60));
+  let totalSec2 = Math.floor((songDuration % 60));
+  if(totalMin2 < 10){
+    totalMin2 = `0${totalMin2}`;
+  }
+  if(totalSec2 < 10){
+    totalSec2 = `0${totalSec2}`
+  }
+  if(songDuration){
+    theSongDuration.textContent = `${totalMin2} : ${totalSec2}`;
+  }
+})
+
+
+// Creating logic to forward or backward the song
+progressParent.addEventListener("click",(e)=>{
+  let myClick = e.offsetX;
+  let totalWidth = e.srcElement.clientWidth;
+  let duration = music.duration;
+
+  let total = (myClick / totalWidth) * duration;
+  music.currentTime = total;
+  console.log(music.duration);
+  console.log(total)
+})
+
+music.addEventListener("ended",()=>{
+  stopMusic();
+})
